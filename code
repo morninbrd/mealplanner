@@ -1,0 +1,551 @@
+
+<div id="jsa-weekly-planner">
+<style>
+/* ---------------------------------------
+   BASE
+--------------------------------------- */
+#jsa-weekly-planner * { box-sizing:border-box; }
+#jsa-weekly-planner {
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  margin: 0 auto;
+  padding: 10px 0 20px;
+  width: 100%;
+}
+
+/* ---------------------------------------
+   CARD STYLE
+--------------------------------------- */
+.jsa-wp-card {
+  background:#FAF7F2; /* cream */
+  border-radius:14px;
+  padding:16px 18px;
+  margin-bottom:16px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  border:1px solid #E5D7C4;
+}
+
+/* ---------------------------------------
+   HEADER
+--------------------------------------- */
+.jsa-wp-header { text-align:center;margin-bottom:4px; }
+.jsa-wp-header h2 { margin:0;font-size:1.5rem;color:#3E3326; }
+.jsa-wp-subtext {
+  text-align:center;
+  font-size:0.85rem;
+  color:#6b6b6b;
+  margin-top:4px;
+}
+
+/* ---------------------------------------
+   LAYOUT
+--------------------------------------- */
+.jsa-wp-row { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:10px; }
+.jsa-wp-col { flex:1 1 220px; }
+
+.jsa-wp-label {
+  font-size:0.9rem;
+  font-weight:600;
+  margin-bottom:4px;
+  display:block;
+  color:#4A4A4A;
+}
+
+.jsa-wp-select,
+.jsa-wp-textarea {
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #C9BCA7;
+  font-size:0.9rem;
+  background:#fff;
+  color:#333;
+}
+
+.jsa-wp-textarea {
+  min-height:60px;
+  resize:vertical;
+}
+
+/* ---------------------------------------
+   BUTTONS
+--------------------------------------- */
+.jsa-wp-controls {
+  display:flex; justify-content:flex-end;
+  gap:8px; flex-wrap:wrap; margin-top:8px;
+}
+
+.jsa-wp-btn {
+  border:none;
+  border-radius:999px;
+  padding:8px 16px;
+  font-size:0.85rem;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  white-space:nowrap;
+}
+
+.jsa-wp-btn-primary {
+  background:#D7C3A5; color:#3f3f3f;
+}
+
+.jsa-wp-btn-ghost {
+  background:transparent;
+  border:1px solid #C9BCA7;
+  color:#4A4A4A;
+}
+
+.jsa-wp-btn-copy {
+  border:none; background:transparent;
+  color:#7A6A4A; font-size:0.75rem;
+  cursor:pointer; text-decoration:underline;
+  padding:0; margin-left:6px;
+}
+
+/* ---------------------------------------
+   TABLE
+--------------------------------------- */
+.jsa-wp-table-wrapper { overflow-x:auto; width:100%; }
+
+.jsa-wp-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.85rem;
+  background:#FFFDF8;
+}
+
+.jsa-wp-table th,
+.jsa-wp-table td {
+  border:1px solid #E0D3C0;
+  padding:6px 8px;
+  vertical-align:top;
+}
+
+.jsa-wp-table th {
+  background:#E9DCCB;
+  font-weight:600;
+  text-align:center;
+  color:#3E3326;
+}
+
+.jsa-wp-table tbody tr:nth-child(even) {
+  background:#F7EFE4; /* alternating cream */
+}
+
+.jsa-wp-meal-header {
+  background:#F1E5D4 !important;
+  font-weight:700;
+  text-align:left;
+  padding:6px 10px;
+  font-size:0.9rem;
+  color:#4A3D2C;
+}
+
+.jsa-wp-cat-label {
+  font-weight:600;
+  color:#4A4A4A;
+  font-size:0.8rem;
+  white-space:nowrap;
+}
+
+/* ---------------------------------------
+   ADHERENCE CIRCLES
+--------------------------------------- */
+.jsa-adherence-container {
+  display:flex; gap:4px;
+  justify-content:center;
+  padding-top:2px;
+}
+.jsa-adherence-circle {
+  width:18px; height:18px;
+  border-radius:50%;
+  cursor:pointer;
+  border:2px solid transparent;
+  transition:0.15s ease;
+}
+.jsa-green { background:#2ECC71; }
+.jsa-yellow { background:#F1C40F; }
+.jsa-red { background:#E74C3C; }
+.jsa-selected {
+  transform:scale(1.25);
+  border-color:#4A4A4A;
+  box-shadow:0 0 3px rgba(0,0,0,0.25);
+}
+
+/* ---------------------------------------
+   PRINT LAYOUT FIXES
+--------------------------------------- */
+@media print {
+
+  @page {
+    size: landscape;
+    margin: 0.4in;
+  }
+
+  /* Hide everything except planner */
+  body * { visibility: hidden !important; }
+  #jsa-weekly-planner, #jsa-weekly-planner * {
+    visibility: visible !important;
+  }
+  #jsa-weekly-planner {
+    position: absolute; left:0; top:0;
+    width: 100%;
+  }
+
+  /* Weekly focus stays at top of page 1 */
+  .jsa-wp-card:first-of-type {
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* Hide buttons */
+  .jsa-wp-btn, .jsa-wp-btn-copy {
+    display:none !important;
+  }
+
+  /* Larger table cells */
+  .jsa-wp-table th,
+  .jsa-wp-table td {
+    font-size:12pt;
+    padding:10px 8px;
+    white-space:normal !important;
+    line-height:1.3;
+  }
+
+  /* Wider columns so text is readable */
+  .jsa-wp-table td,
+  .jsa-wp-table th {
+    min-width:140px !important;
+  }
+
+  /* Adherence circle print clarity */
+  .jsa-adherence-circle {
+    border-color:#333 !important;
+    outline:1px solid #333;
+    transform:scale(1.2);
+  }
+}
+</style>
+
+
+<!-- WEEKLY FOCUS -->
+<div class="jsa-wp-card">
+  <div class="jsa-wp-row">
+    <div class="jsa-wp-col" style="max-width:240px;">
+      <label class="jsa-wp-label">Focus Type</label>
+      <select id="jsa-focus-type" class="jsa-wp-select">
+        <option value="scripture">Scripture</option>
+        <option value="affirmation">Affirmation</option>
+        <option value="inspiration">Inspiration</option>
+        <option value="goal">Goal</option>
+      </select>
+    </div>
+
+    <div class="jsa-wp-col">
+      <label class="jsa-wp-label">My focus this week</label>
+      <textarea id="jsa-focus-text" class="jsa-wp-textarea"></textarea>
+    </div>
+  </div>
+
+  <div class="jsa-wp-controls">
+    <button id="jsa-save-week" class="jsa-wp-btn jsa-wp-btn-primary">Save Week</button>
+    <button id="jsa-clear-week" class="jsa-wp-btn jsa-wp-btn-ghost">Clear Week</button>
+    <button onclick="window.print()" class="jsa-wp-btn jsa-wp-btn-ghost">Print</button>
+  </div>
+</div>
+
+<!-- TABLE -->
+<div class="jsa-wp-card">
+  <div class="jsa-wp-table-wrapper">
+    <table class="jsa-wp-table">
+      <thead>
+        <tr>
+          <th style="min-width:130px;">Category</th>
+          <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th>
+          <th>Fri</th><th>Sat</th><th>Sun</th>
+        </tr>
+      </thead>
+      <tbody id="jsa-week-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+(function() {
+
+const STORAGE_KEY = "jsa-week-plan-v4";
+
+/* DAYS */
+const DAYS = [
+  { key:"mon", label:"Mon" },
+  { key:"tue", label:"Tue" },
+  { key:"wed", label:"Wed" },
+  { key:"thu", label:"Thu" },
+  { key:"fri", label:"Fri" },
+  { key:"sat", label:"Sat" },
+  { key:"sun", label:"Sun" }
+];
+
+/* FOOD OPTIONS */
+const OPTIONS = {
+  dairy: ["","Cottage cheese — 3 oz","Plain non-fat yogurt — 4–6 oz","Skim milk — 8 oz","Hard cheese — 1 oz"],
+  breakfastProtein: ["","Egg — 1","Egg substitute — 1/2 cup","Egg whites — 2","Cottage cheese — 3 oz","Beans — 4 oz","Chicken — 2 oz","Beef — 2 oz","Pork — 2 oz"],
+  breakfastCereal: ["","Oatmeal — 1 oz dry","Oat bran — 1 oz","Grits — 1 oz","Cream of Rice — 1 oz","Cream of Buckwheat — 1 oz"],
+  fruit: ["","Apple — 1 small","Orange — 1 small","Peach — 1 small","Pear — 1 small","Berries — 1/2 cup","Grapes — 1/2 cup","Pineapple — 1/2 cup"],
+  protein: ["","Chicken — 3–4 oz","Turkey — 3–4 oz","Fish — 3–4 oz","Beef — 3–4 oz","Eggs — 2","Beans — 6 oz","Cottage cheese — 6 oz"],
+  salad: ["","Lettuce — 6–8 oz","Mixed greens — 6–8 oz","Spinach — 6–8 oz","Cucumber — 6–8 oz","Broccoli — 6–8 oz","Tomatoes — 6–8 oz"],
+  vegetable: ["","Broccoli — 6–8 oz","Carrots — 6–8 oz","Green beans — 6–8 oz","Zucchini — 6–8 oz","Squash — 6–8 oz"],
+  grain: ["","Potato — 4 oz","Sweet potato — 4 oz","Brown rice — 1/2 cup","Quinoa — 1/2 cup"],
+  fat: ["","Olive oil — 1 tbsp","Butter — 1 tbsp","Avocado — 2 oz","Nuts — 1/2 oz"]
+};
+
+/* STRUCTURE */
+const STRUCTURE = [
+  {
+    mealKey:"breakfast",
+    mealLabel:"Breakfast",
+    rows:[
+      {rowKey:"bf_dairy", label:"Dairy", optionKey:"dairy"},
+      {rowKey:"bf_protein", label:"Protein", optionKey:"breakfastProtein"},
+      {rowKey:"bf_cereal", label:"Cereal", optionKey:"breakfastCereal"},
+      {rowKey:"bf_fruit", label:"Fruit", optionKey:"fruit"},
+      {rowKey:"bf_fat", label:"Fat", optionKey:"fat"}
+    ]
+  },
+  {
+    mealKey:"lunch",
+    mealLabel:"Lunch",
+    rows:[
+      {rowKey:"ln_protein", label:"Protein", optionKey:"protein"},
+      {rowKey:"ln_salad", label:"Salad (6–8 oz)", optionKey:"salad"},
+      {rowKey:"ln_veg", label:"Vegetable (6–8 oz)", optionKey:"vegetable"},
+      {rowKey:"ln_grain", label:"Grain", optionKey:"grain"},
+      {rowKey:"ln_fat", label:"Fat", optionKey:"fat"}
+    ]
+  },
+  {
+    mealKey:"dinner",
+    mealLabel:"Dinner",
+    rows:[
+      {rowKey:"dn_protein", label:"Protein", optionKey:"protein"},
+      {rowKey:"dn_grain", label:"Grain", optionKey:"grain"},
+      {rowKey:"dn_salad", label:"Salad (6–8 oz)", optionKey:"salad"},
+      {rowKey:"dn_veg", label:"Vegetable (6–8 oz)", optionKey:"vegetable"},
+      {rowKey:"dn_fat", label:"Fat", optionKey:"fat"}
+    ]
+  }
+];
+
+/* ADHERENCE */
+function adherenceHTML(mealKey, dayKey){
+  return `
+    <div class="jsa-adherence-container" id="adh-${mealKey}-${dayKey}">
+      <div class="jsa-adherence-circle jsa-green" data-color="green" data-meal="${mealKey}" data-day="${dayKey}"></div>
+      <div class="jsa-adherence-circle jsa-yellow" data-color="yellow" data-meal="${mealKey}" data-day="${dayKey}"></div>
+      <div class="jsa-adherence-circle jsa-red" data-color="red" data-meal="${mealKey}" data-day="${dayKey}"></div>
+    </div>
+  `;
+}
+
+/* BUILD TABLE */
+function buildTable(){
+  const tbody=document.getElementById("jsa-week-body");
+  tbody.innerHTML="";
+
+  STRUCTURE.forEach(meal=>{
+    const hr=document.createElement("tr");
+    const hc=document.createElement("td");
+    hc.colSpan=8;
+    hc.className="jsa-wp-meal-header";
+    hc.textContent=meal.mealLabel;
+    hr.appendChild(hc);
+    tbody.appendChild(hr);
+
+    meal.rows.forEach(row=>{
+      const tr=document.createElement("tr");
+      const firstTd=document.createElement("td");
+      firstTd.innerHTML=`<span class="jsa-wp-cat-label">${row.label}</span>
+                         <button class="jsa-wp-btn-copy" data-rowkey="${row.rowKey}">Copy Monday → All</button>`;
+      tr.appendChild(firstTd);
+
+      DAYS.forEach(day=>{
+        const td=document.createElement("td");
+        const sel=document.createElement("select");
+        sel.className="jsa-wp-select";
+        sel.id=`jsa-${row.rowKey}-${day.key}`;
+        (OPTIONS[row.optionKey]||[""]).forEach(opt=>{
+          const o=document.createElement("option");
+          o.value=opt; o.textContent=opt||"-- choose --";
+          sel.appendChild(o);
+        });
+        td.appendChild(sel);
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+
+    const aRow=document.createElement("tr");
+    const aCell=document.createElement("td");
+    aCell.innerHTML='<span class="jsa-wp-cat-label">Adherence</span>';
+    aRow.appendChild(aCell);
+
+    DAYS.forEach(day=>{
+      const td=document.createElement("td");
+      td.innerHTML=adherenceHTML(meal.mealKey, day.key);
+      aRow.appendChild(td);
+    });
+    tbody.appendChild(aRow);
+  });
+}
+
+/* SAVE */
+function getWeekData(){
+  const data={
+    focus:{
+      type:document.getElementById("jsa-focus-type").value,
+      text:document.getElementById("jsa-focus-text").value
+    },
+    selections:{},
+    adherence:{}
+  };
+
+  STRUCTURE.forEach(meal=>{
+    meal.rows.forEach(row=>{
+      data.selections[row.rowKey]={};
+      DAYS.forEach(day=>{
+        const el=document.getElementById(`jsa-${row.rowKey}-${day.key}`);
+        data.selections[row.rowKey][day.key]=el?el.value:"";
+      });
+    });
+
+    data.adherence[meal.mealKey]={};
+    DAYS.forEach(day=>{
+      const container=document.getElementById(`adh-${meal.mealKey}-${day.key}`);
+      const selected=container.querySelector(".jsa-adherence-circle.jsa-selected");
+      data.adherence[meal.mealKey][day.key]=selected?selected.dataset.color:"";
+    });
+  });
+
+  return data;
+}
+
+function saveWeek(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(getWeekData()));
+  alert("Week saved!");
+}
+
+/* LOAD */
+function loadWeek(){
+  const raw=localStorage.getItem(STORAGE_KEY);
+  if(!raw) return;
+  const data=JSON.parse(raw);
+
+  document.getElementById("jsa-focus-type").value=data.focus?.type||"scripture";
+  document.getElementById("jsa-focus-text").value=data.focus?.text||"";
+
+  STRUCTURE.forEach(meal=>{
+    meal.rows.forEach(row=>{
+      DAYS.forEach(day=>{
+        const el=document.getElementById(`jsa-${row.rowKey}-${day.key}`);
+        if(el && data.selections[row.rowKey]){
+          el.value=data.selections[row.rowKey][day.key]||"";
+        }
+      });
+    });
+
+    DAYS.forEach(day=>{
+      const container=document.getElementById(`adh-${meal.mealKey}-${day.key}`);
+      if(!container) return;
+      container.querySelectorAll(".jsa-adherence-circle")
+        .forEach(c=>c.classList.remove("jsa-selected"));
+      const color=data.adherence[meal.mealKey][day.key];
+      if(color){
+        const c=container.querySelector(`.jsa-adherence-circle[data-color="${color}"]`);
+        if(c) c.classList.add("jsa-selected");
+      }
+    });
+  });
+}
+
+/* CLEAR */
+function clearWeek(){
+  if(!confirm("Clear everything for this week?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+
+  document.getElementById("jsa-focus-type").value="scripture";
+  document.getElementById("jsa-focus-text").value="";
+
+  STRUCTURE.forEach(meal=>{
+    meal.rows.forEach(row=>{
+      DAYS.forEach(day=>{
+        const el=document.getElementById(`jsa-${row.rowKey}-${day.key}`);
+        if(el) el.value="";
+      });
+    });
+    DAYS.forEach(day=>{
+      const container=document.getElementById(`adh-${meal.mealKey}-${day.key}`);
+      if(container){
+        container.querySelectorAll(".jsa-adherence-circle")
+          .forEach(c=>c.classList.remove("jsa-selected"));
+      }
+    });
+  });
+}
+
+/* BUTTONS */
+function setupCopyButtons(){
+  document.getElementById("jsa-week-body")
+    .addEventListener("click", e=>{
+      const btn=e.target.closest(".jsa-wp-btn-copy");
+      if(!btn) return;
+
+      const rowKey=btn.dataset.rowkey;
+      const monValue=document.getElementById(`jsa-${rowKey}-mon`).value;
+
+      DAYS.forEach(day=>{
+        if(day.key!=="mon"){
+          const el=document.getElementById(`jsa-${rowKey}-${day.key}`);
+          if(el) el.value=monValue;
+        }
+      });
+
+      saveWeek();
+    });
+}
+
+function setupAdherenceClicks(){
+  document.getElementById("jsa-weekly-planner")
+    .addEventListener("click", e=>{
+      const c=e.target.closest(".jsa-adherence-circle");
+      if(!c) return;
+
+      const meal=c.dataset.meal;
+      const day=c.dataset.day;
+      const parent=document.getElementById(`adh-${meal}-${day}`);
+
+      parent.querySelectorAll(".jsa-adherence-circle")
+        .forEach(x=>x.classList.remove("jsa-selected"));
+
+      c.classList.add("jsa-selected");
+      saveWeek();
+    });
+}
+
+/* INIT */
+function initPlanner(){
+  buildTable();
+  setupCopyButtons();
+  setupAdherenceClicks();
+  loadWeek();
+
+  document.getElementById("jsa-save-week").addEventListener("click", saveWeek);
+  document.getElementById("jsa-clear-week").addEventListener("click", clearWeek);
+}
+
+initPlanner();
+
+})();
+</script>
+</div>
+
