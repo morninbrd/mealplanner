@@ -1,0 +1,225 @@
+/* ---------------------------------------
+   BASE
+--------------------------------------- */
+#jsa-weekly-planner * { box-sizing:border-box; }
+#jsa-weekly-planner {
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  margin: 0 auto;
+  padding: 10px 0 20px;
+  width: 100%;
+}
+
+/* ---------------------------------------
+   CARD STYLE
+--------------------------------------- */
+.jsa-wp-card {
+  background:#FAF7F2; /* cream */
+  border-radius:14px;
+  padding:16px 18px;
+  margin-bottom:16px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  border:1px solid #E5D7C4;
+}
+
+/* ---------------------------------------
+   HEADER
+--------------------------------------- */
+.jsa-wp-header { text-align:center;margin-bottom:4px; }
+.jsa-wp-header h2 { margin:0;font-size:1.5rem;color:#3E3326; }
+.jsa-wp-subtext {
+  text-align:center;
+  font-size:0.85rem;
+  color:#6b6b6b;
+  margin-top:4px;
+}
+
+/* ---------------------------------------
+   LAYOUT
+--------------------------------------- */
+.jsa-wp-row { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:10px; }
+.jsa-wp-col { flex:1 1 220px; }
+
+.jsa-wp-label {
+  font-size:0.9rem;
+  font-weight:600;
+  margin-bottom:4px;
+  display:block;
+  color:#4A4A4A;
+}
+
+.jsa-wp-select,
+.jsa-wp-textarea {
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #C9BCA7;
+  font-size:0.9rem;
+  background:#fff;
+  color:#333;
+}
+
+.jsa-wp-textarea {
+  min-height:60px;
+  resize:vertical;
+}
+
+/* ---------------------------------------
+   BUTTONS
+--------------------------------------- */
+.jsa-wp-controls {
+  display:flex; justify-content:flex-end;
+  gap:8px; flex-wrap:wrap; margin-top:8px;
+}
+
+.jsa-wp-btn {
+  border:none;
+  border-radius:999px;
+  padding:8px 16px;
+  font-size:0.85rem;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  white-space:nowrap;
+}
+
+.jsa-wp-btn-primary {
+  background:#D7C3A5; color:#3f3f3f;
+}
+
+.jsa-wp-btn-ghost {
+  background:transparent;
+  border:1px solid #C9BCA7;
+  color:#4A4A4A;
+}
+
+.jsa-wp-btn-copy {
+  border:none; background:transparent;
+  color:#7A6A4A; font-size:0.75rem;
+  cursor:pointer; text-decoration:underline;
+  padding:0; margin-left:6px;
+}
+
+/* ---------------------------------------
+   TABLE
+--------------------------------------- */
+.jsa-wp-table-wrapper { overflow-x:auto; width:100%; }
+
+.jsa-wp-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.85rem;
+  background:#FFFDF8;
+}
+
+.jsa-wp-table th,
+.jsa-wp-table td {
+  border:1px solid #E0D3C0;
+  padding:6px 8px;
+  vertical-align:top;
+}
+
+.jsa-wp-table th {
+  background:#E9DCCB;
+  font-weight:600;
+  text-align:center;
+  color:#3E3326;
+}
+
+.jsa-wp-table tbody tr:nth-child(even) {
+  background:#F7EFE4; /* alternating cream */
+}
+
+.jsa-wp-meal-header {
+  background:#F1E5D4 !important;
+  font-weight:700;
+  text-align:left;
+  padding:6px 10px;
+  font-size:0.9rem;
+  color:#4A3D2C;
+}
+
+.jsa-wp-cat-label {
+  font-weight:600;
+  color:#4A4A4A;
+  font-size:0.8rem;
+  white-space:nowrap;
+}
+
+/* ---------------------------------------
+   ADHERENCE CIRCLES
+--------------------------------------- */
+.jsa-adherence-container {
+  display:flex; gap:4px;
+  justify-content:center;
+  padding-top:2px;
+}
+.jsa-adherence-circle {
+  width:18px; height:18px;
+  border-radius:50%;
+  cursor:pointer;
+  border:2px solid transparent;
+  transition:0.15s ease;
+}
+.jsa-green { background:#2ECC71; }
+.jsa-yellow { background:#F1C40F; }
+.jsa-red { background:#E74C3C; }
+.jsa-selected {
+  transform:scale(1.25);
+  border-color:#4A4A4A;
+  box-shadow:0 0 3px rgba(0,0,0,0.25);
+}
+
+/* ---------------------------------------
+   PRINT LAYOUT FIXES
+--------------------------------------- */
+@media print {
+
+  @page {
+    size: landscape;
+    margin: 0.4in;
+  }
+
+  /* Hide everything except planner */
+  body * { visibility: hidden !important; }
+  #jsa-weekly-planner, #jsa-weekly-planner * {
+    visibility: visible !important;
+  }
+  #jsa-weekly-planner {
+    position: absolute; left:0; top:0;
+    width: 100%;
+  }
+
+  /* Weekly focus stays at top of page 1 */
+  .jsa-wp-card:first-of-type {
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* Hide buttons */
+  .jsa-wp-btn, .jsa-wp-btn-copy {
+    display:none !important;
+  }
+
+  /* Larger table cells */
+  .jsa-wp-table th,
+  .jsa-wp-table td {
+    font-size:12pt;
+    padding:10px 8px;
+    white-space:normal !important;
+    line-height:1.3;
+  }
+
+  /* Wider columns so text is readable */
+  .jsa-wp-table td,
+  .jsa-wp-table th {
+    min-width:140px !important;
+  }
+
+  /* Adherence circle print clarity */
+  .jsa-adherence-circle {
+    border-color:#333 !important;
+    outline:1px solid #333;
+    transform:scale(1.2);
+  }
+}

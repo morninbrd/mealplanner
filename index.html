@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekly Meal Planner</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main id="jsa-weekly-planner">
+      <section class="jsa-wp-card">
+        <div class="jsa-wp-row">
+          <div class="jsa-wp-col" style="max-width:240px;">
+            <label class="jsa-wp-label" for="jsa-focus-type">Focus Type</label>
+            <select id="jsa-focus-type" class="jsa-wp-select">
+              <option value="scripture">Scripture</option>
+              <option value="affirmation">Affirmation</option>
+              <option value="inspiration">Inspiration</option>
+              <option value="goal">Goal</option>
+            </select>
+          </div>
+
+          <div class="jsa-wp-col">
+            <label class="jsa-wp-label" for="jsa-focus-text">My focus this week</label>
+            <textarea id="jsa-focus-text" class="jsa-wp-textarea"></textarea>
+          </div>
+        </div>
+
+        <div class="jsa-wp-controls">
+          <button id="jsa-save-week" class="jsa-wp-btn jsa-wp-btn-primary">Save Week</button>
+          <button id="jsa-clear-week" class="jsa-wp-btn jsa-wp-btn-ghost">Clear Week</button>
+          <button class="jsa-wp-btn jsa-wp-btn-ghost" onclick="window.print()">Print</button>
+        </div>
+      </section>
+
+      <section class="jsa-wp-card">
+        <div class="jsa-wp-table-wrapper">
+          <table class="jsa-wp-table">
+            <thead>
+              <tr>
+                <th style="min-width:130px;">Category</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Sun</th>
+              </tr>
+            </thead>
+            <tbody id="jsa-week-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="planner.js" defer></script>
+  </body>
+</html>
